@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>E-Raport — Nilai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+      :root{
+        --accent:#7c3aed;
+        --accent-2:#06b6d4;
+        --muted:#6b7280;
+        --bg1:#f8fafc;
+        --bg2:#eef2ff;
+      }
+      *{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;}
+      body{background:linear-gradient(135deg,var(--bg1),var(--bg2));min-height:100vh;padding:28px 16px;}
+      .header{background:linear-gradient(90deg, rgba(124,58,237,0.14), rgba(6,182,212,0.08));border-radius:16px;padding:18px 22px;backdrop-filter: blur(6px);box-shadow: 0 10px 30px rgba(15,23,42,0.06);display:flex;align-items:center;justify-content:space-between;gap:16px;animation: slideDown .6s ease both;}
+      .logo .badge{width:110px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;color:white;font-weight:800;font-size:18px;box-shadow:0 8px 30px rgba(99,102,241,0.14);transform:translateY(-3px);animation: float 3s ease-in-out infinite;}
+      .brand-title{font-weight:700;color:#0f172a}
+      .brand-sub{color:var(--muted);font-size:0.95rem}
+      @keyframes float{0%{transform:translateY(-3px)}50%{transform:translateY(3px)}100%{transform:translateY(-3px)}}
+      @keyframes slideDown{0%{opacity:0;transform:translateY(-10px)}100%{opacity:1;transform:none}}
+      .card-ghost{background:linear-gradient(180deg,rgba(255,255,255,0.98),rgba(255,255,255,0.92));border:none;border-radius:14px;box-shadow:0 10px 30px rgba(2,6,23,0.06);}
+      .mapel-btn{border-radius:12px;padding:8px 12px;box-shadow:0 6px 18px rgba(15,23,42,0.04);transition:transform .16s ease,box-shadow .16s ease;}
+      .mapel-btn:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(15,23,42,0.08);}
+      .table thead th{border-bottom:0;font-weight:600;color:var(--muted)}
+      .table tbody tr{transition:transform .12s ease,box-shadow .12s ease}
+      .table tbody tr:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(2,6,23,0.04)}
+      .footer{margin-top:28px;padding:14px;border-radius:12px;background:rgba(255,255,255,0.9);text-align:center;color:var(--muted);font-size:0.95rem;box-shadow:0 8px 30px rgba(2,6,23,0.04)}
+      .btn-accent{background:linear-gradient(90deg,var(--accent),var(--accent-2));border:none;color:white}
+      .badge-glow{background:linear-gradient(90deg,#8b5cf6,#06b6d4);color:#fff;padding:6px 12px;border-radius:999px;box-shadow:0 8px 28px rgba(99,102,241,0.12)}
+      .modal-lg{max-width:820px}
+      .small-muted{color:var(--muted)}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header mb-4">
+        <div class="logo">
+          <div class="badge">E-Raport</div>
+          <div>
+            <br>
+            <div class="brand-title">E-Raport</div>
+            <div class="brand-sub">Sistem sederhana untuk input & kelola nilai</div>
+          </div>
+        </div>
+        <div class="text-end">
+          <div style="margin-top:6px"><span class="badge-glow">CRUD • Preview • Export</span></div>
+        </div>
+      </div>
+
+      <div class="card card-ghost p-4 mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h5 class="mb-0">Nilai per Mata Pelajaran</h5>
+            <div class="small-muted">Klik mapel untuk lihat detail nilai</div>
+          </div>
+          <div>
+            <button class="btn btn-light me-2" onclick="location.href='/'"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+            <button id="btn-add" class="btn btn-accent" data-bs-toggle="modal" data-bs-target="#modalForm"><i class="bi bi-plus-lg"></i> Tambah Nilai</button>
+            <button id="btn-add-siswa" class="btn btn-outline-primary ms-2" data-bs-toggle="modal" data-bs-target="#modalSiswa"><i class="bi bi-person-plus"></i> Tambah Siswa</button>
+          </div>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2">
+          {% for m in mapel_stats %}
+            <button class="mapel-btn d-flex align-items-center gap-2 p-2" data-id="{{ m.ID_Mapel_Raditya }}" onclick="Raditya_openMapel({{ m.ID_Mapel_Raditya }})">
+              <div style="min-width:36px;text-align:center">
+                <i class="bi bi-journal-text" style="font-size:18px;color:var(--accent)"></i>
+              </div>
+              <div style="text-align:left">
+                <div style="font-weight:600">{{ m.Nama_Mapel_Raditya }}</div>
+                <div class="small-muted" style="font-size:0.86rem">{{ m.count_scores }} nilai • rata-rata {{ m.avg_score }}</div>
+              </div>
+            </button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="card card-ghost p-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div>
+            <h5 class="mb-0">Daftar Siswa (Nilai Akhir Rata-Rata)</h5>
+            <div class="small-muted">Tabel menampilkan ringkasan nilai tiap siswa.</div>
+          </div>
+
+          <div style="min-width:520px; display:flex; gap:8px; align-items:center;">
+            <button id="btn-cetak" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalCetak"><i class="bi bi-printer"></i> Cetak</button>
+
+            <div style="flex:1">
+              <div class="input-group">
+                <input type="text" id="searchSiswa" class="form-control" placeholder="Cari nama / NIS siswa...">
+                <button class="btn btn-light" id="refreshSiswa"><i class="bi bi-arrow-clockwise"></i></button>
+              </div>
+            </div>
+
+            <button id="btn-filter" class="btn btn-outline-primary ms-2" title="Filter" data-bs-toggle="modal" data-bs-target="#modalFilter">
+              <i class="bi bi-filter"></i> Filter
+            </button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table align-middle" id="tableSiswa">
+            <thead>
+              <tr>
+                <th style="width:60px">No</th>
+                <th>NIS</th>
+                <th>Nama Siswa</th>
+                <th>Nilai Akhir (Rata-rata)</th>
+                <th class="text-end">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for s in students %}
+                <tr>
+                  <td>{{ loop.index }}</td>
+                  <td class="nis-cell">{{ s.NIS_Raditya }}</td>
+                  <td class="name-cell">{{ s.Nama_Raditya }}</td>
+                  <td><strong>{{ s.Avg_Final }}</strong></td>
+                  <td class="text-end">
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="Raditya_openStudent({{ s.NIS_Raditya }})"><i class="bi bi-eye"></i> Detail</button>
+                    <button class="btn btn-sm btn-outline-secondary me-1" onclick="Raditya_editStudent({{ s.NIS_Raditya }}, '{{ s.Nama_Raditya | escape }}')"><i class="bi bi-pencil-square"></i> Edit</button>
+                    <a class="btn btn-sm btn-outline-success" href="/raport/{{ s.NIS_Raditya }}/pdf"><i class="bi bi-file-earmark-pdf"></i> Export PDF</a>
+                  </td>
+                </tr>
+              {% else %}
+                <tr><td colspan="5" class="text-center small-muted py-4">Belum ada siswa.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="footer">© <strong>E-Raport </strong>| All Right Reserved</div>
+    </div>
+
+    <div class="modal fade" id="modalCetak" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Cetak / Export</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row gx-4">
+              <div class="col-md-6">
+                <div style="border-radius:10px;padding:18px;border:1px solid #eef2ff">
+                  <div style="font-weight:700;margin-bottom:8px">PDF</div>
+                  <div class="small-muted mb-3">Ekspor semua data menjadi PDF rapih.</div>
+                  <div class="d-grid gap-2">
+                    <button id="pdf-all" class="btn btn-accent">Cetak Semua (PDF)</button>
+                    <button id="pdf-filter" class="btn btn-outline-secondary">Cetak Dengan Filter Saat Ini (PDF)</button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div style="border-radius:10px;padding:18px;border:1px solid #eef2ff">
+                  <div style="font-weight:700;margin-bottom:8px">CSV</div>
+                  <div class="small-muted mb-3">Download data dalam format CSV untuk Excel / Sheets.</div>
+                  <div class="d-grid gap-2">
+                    <button id="csv-all" class="btn btn-success">Download Semua (CSV)</button>
+                    <button id="csv-filter" class="btn btn-outline-secondary">Download Dengan Filter Saat Ini (CSV)</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="small-muted mt-3">Catatan: "Dengan Filter Saat Ini" menggunakan filter semester/tahun/kelas yang aktif di halaman.</div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="modalForm" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <form id="formNilai" method="post">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalTitle">Tambah Nilai</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+              <input type="hidden" id="field-id" name="id">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Siswa</label>
+                  <select class="form-select" name="nis" id="field-nis" required>
+                    <option value="" disabled selected>Pilih siswa...</option>
+                    {% for ss in siswa %}
+                      <option value="{{ ss.NIS_Raditya }}">{{ ss.Nama_Raditya }} — {{ ss.NIS_Raditya }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Mata Pelajaran</label>
+                  <select class="form-select" name="id_mapel" id="field-mapel" required>
+                    <option value="" disabled selected>Pilih mapel...</option>
+                    {% for mm in mapel %}
+                      <option value="{{ mm.ID_Mapel_Raditya }}">{{ mm.Nama_Mapel_Raditya }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Nilai Tugas</label>
+                  <input type="number" min="0" max="100" step="0.1" name="nilai_tugas" id="field-tugas" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Nilai UTS</label>
+                  <input type="number" min="0" max="100" step="0.1" name="nilai_uts" id="field-uts" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Nilai UAS</label>
+                  <input type="number" min="0" max="100" step="0.1" name="nilai_uas" id="field-uas" class="form-control" required>
+                </div>
+                <div class="col-12">
+                  <div class="small-muted">Nilai akhir dihitung otomatis: <strong>30% Tugas • 30% UTS • 40% UAS</strong></div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+              <button type="submit" class="btn btn-accent" id="submitBtn">Simpan</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal fade" id="modalSiswa" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-md">
+        <form id="formSiswa" method="post">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalSiswaTitle">Tambah Siswa</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label">NIS</label>
+                  <input type="number" name="nis" id="siswa-nis" class="form-control" required>
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Nama</label>
+                  <input type="text" name="nama" id="siswa-nama" class="form-control" required>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label">Jenis Kelamin</label>
+                  <select name="jenis_kelamin" id="siswa-jk" class="form-select" required>
+                    <option value="" disabled selected>Pilih jenis kelamin...</option>
+                    {% for jk in jk_options %}
+                      <option value="{{ jk }}">{{ jk }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Tempat Lahir</label>
+                  <input type="text" name="tempat_lahir" id="siswa-tempat" class="form-control">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Tanggal Lahir</label>
+                  <input type="date" name="tanggal_lahir" id="siswa-tanggal" class="form-control">
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Alamat</label>
+                  <textarea name="alamat" id="siswa-alamat" class="form-control" rows="2"></textarea>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label">Kelas</label>
+                  <select name="id_kelas" id="siswa-kelas" class="form-select" required>
+                    <option value="" disabled selected>Pilih kelas...</option>
+                    {% for k in kelas %}
+                      <option value="{{ k.ID_Kelas_Raditya }}">{{ k.Tingkat_Raditya }} {{ k.Jurusan_Raditya }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+              <button type="submit" class="btn btn-accent" id="submitSiswaBtn">Simpan</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal fade" id="modalFilter" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <form id="formFilter" class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Filter Data</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Semester</label>
+              <select id="filter-semester" class="form-select" name="semester">
+                <option value="">Semua</option>
+                {% for sem in semester_list %}
+                  <option value="{{ sem }}" {% if active_filters.semester and active_filters.semester == sem|string %}selected{% endif %}>{{ sem }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Tahun Pelajaran</label>
+              <select id="filter-tahun" class="form-select" name="tahun_ajaran">
+                <option value="">Semua</option>
+                {% for th in tahun_list %}
+                  <option value="{{ th }}" {% if active_filters.tahun and active_filters.tahun == th|string %}selected{% endif %}>{{ th }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Kelas</label>
+              <select id="filter-kelas" class="form-select" name="id_kelas">
+                <option value="">Semua</option>
+                {% for k in kelas %}
+                  <option value="{{ k.ID_Kelas_Raditya }}" {% if active_filters.id_kelas and active_filters.id_kelas == k.ID_Kelas_Raditya|string %}selected{% endif %}>{{ k.Tingkat_Raditya }} {{ k.Jurusan_Raditya }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-accent">Apply</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      const Raditya_qs = s => document.querySelector(s);
+      const Raditya_qsa = s => document.querySelectorAll(s);
+
+      Raditya_qs('#refreshSiswa').addEventListener('click', ()=> window.location.href = '/');
+
+      function currentParams() {
+        return window.location.search ? window.location.search : '';
+      }
+      Raditya_qs('#pdf-all').addEventListener('click', ()=> {
+        window.open('/cetak-raport-all/pdf', '_blank');
+      });
+      Raditya_qs('#pdf-filter').addEventListener('click', ()=> {
+        window.open('/cetak-raport-all/pdf' + currentParams(), '_blank');
+      });
+      Raditya_qs('#csv-all').addEventListener('click', ()=> {
+        window.open('/cetak-raport-all/csv', '_blank');
+      });
+      Raditya_qs('#csv-filter').addEventListener('click', ()=> {
+        window.open('/cetak-raport-all/csv' + currentParams(), '_blank');
+      });
+
+      Raditya_qs('#formFilter').addEventListener('submit', function(e){
+        e.preventDefault();
+        const sem = Raditya_qs('#filter-semester').value;
+        const th = Raditya_qs('#filter-tahun').value;
+        const kelas = Raditya_qs('#filter-kelas').value;
+        const params = new URLSearchParams();
+        if(sem) params.set('semester', sem);
+        if(th) params.set('tahun', th);
+        if(kelas) params.set('id_kelas', kelas);
+        const url = '/' + (params.toString() ? '?' + params.toString() : '');
+        window.location.href = url;
+      });
+
+      function Raditya_openMapel(id){
+        fetch(`/mapel/${id}/data`).then(r=>r.json()).then(rows=>{
+          if(!rows || !rows.length) {
+            Swal.fire({icon:'info',title:'Kosong',text:'Belum ada nilai untuk mapel ini.'});
+            return;
+          }
+          let html = `<div style="max-height:400px;overflow:auto"><table class="table table-sm table-striped"><thead><tr><th>#</th><th>NIS</th><th>Nama</th><th>Akhir</th></tr></thead><tbody>`;
+          rows.forEach((r,i)=>{
+            html += `<tr><td>${i+1}</td><td>${r.NIS_Raditya || ''}</td><td>${r.Nama_Raditya || ''}</td><td><strong>${r.Nilai_Akhir_Raditya}</strong></td></tr>`;
+          });
+          html += `</tbody></table></div>`;
+          Swal.fire({title:'Detail Nilai', html:html, width:800, showCloseButton:true});
+        }).catch(err=>{
+          console.warn('gagal fetch mapel data', err);
+          Swal.fire({icon:'error',title:'Error',text:'Tidak dapat mengambil data mapel.'});
+        });
+      }
+
+      function Raditya_openStudent(nis){
+        fetch(`/student/${nis}/nilai`).then(r=>r.json()).then(rows=>{
+          let html;
+          if(!rows || !rows.length){
+            html = `<div class="text-center small-muted">Belum ada nilai untuk siswa ini.</div>`;
+            Swal.fire({title:'Nilai Siswa', html:html, width:800, showCloseButton:true});
+            return;
+          }
+          html = `<div style="max-height:420px;overflow:auto"><table class="table table-sm table-hover"><thead><tr><th>#</th><th>Mapel</th><th>Tugas</th><th>UTS</th><th>UAS</th><th>Akhir</th><th>Aksi</th></tr></thead><tbody>`;
+          rows.forEach((r,i)=>{
+            html += `<tr><td>${i+1}</td><td>${r.Nama_Mapel_Raditya}</td><td>${r.Nilai_Tugas_Raditya}</td><td>${r.Nilai_UTS_Raditya}</td><td>${r.Nilai_UAS_Raditya}</td><td><strong>${r.Nilai_Akhir_Raditya}</strong></td><td>
+              <button class="btn btn-sm btn-outline-warning me-1" onclick="Raditya_editScore(${r.ID_Nilai_Raditya})"><i class="bi bi-pencil"></i></button>
+              <button class="btn btn-sm btn-outline-danger" onclick="Raditya_deleteScore(${r.ID_Nilai_Raditya})"><i class="bi bi-trash"></i></button>
+            </td></tr>`;
+          });
+          html += `</tbody></table></div>`;
+          Swal.fire({title:'Nilai Siswa', html:html, width:900, showCloseButton:true});
+        }).catch(err=>{
+          console.warn('gagal fetch student nilai', err);
+          Swal.fire({icon:'error',title:'Error',text:'Tidak dapat mengambil data nilai siswa.'});
+        });
+      }
+
+      async function Raditya_editScore(id){
+        try{ Swal.close(); }catch(e){}
+        try{
+          const res = await fetch(`/nilai/${id}/json`);
+          if(!res.ok) throw new Error('fetch not ok');
+          const row = await res.json();
+          if(!row || Object.keys(row).length === 0){
+            return Swal.fire({icon:'error',title:'Data tidak ditemukan',text:'Tidak ada data nilai untuk id tersebut.'});
+          }
+
+          Raditya_qs('#modalTitle').textContent = 'Edit Nilai';
+          Raditya_qs('#formNilai').action = `/nilai/edit/${id}`;
+
+          const nisVal = row.NIS_Raditya !== undefined && row.NIS_Raditya !== null ? row.NIS_Raditya : '';
+          const mapelVal = row.ID_Mapel_Raditya !== undefined && row.ID_Mapel_Raditya !== null ? row.ID_Mapel_Raditya : '';
+          Raditya_qs('#field-nis').value = nisVal;
+          Raditya_qs('#field-mapel').value = mapelVal;
+
+          Raditya_qs('#field-tugas').value = (row.Nilai_Tugas_Raditya !== undefined && row.Nilai_Tugas_Raditya !== null) ? row.Nilai_Tugas_Raditya : '';
+          Raditya_qs('#field-uts').value = (row.Nilai_UTS_Raditya !== undefined && row.Nilai_UTS_Raditya !== null) ? row.Nilai_UTS_Raditya : '';
+          Raditya_qs('#field-uas').value = (row.Nilai_UAS_Raditya !== undefined && row.Nilai_UAS_Raditya !== null) ? row.Nilai_UAS_Raditya : '';
+
+          Raditya_qs('#submitBtn').textContent = 'Update';
+          Raditya_qs('#submitBtn').disabled = false;
+          new bootstrap.Modal(document.getElementById('modalForm')).show();
+        }catch(err){
+          console.error('gagal load nilai untuk edit', err);
+          Swal.fire({icon:'error',title:'Error',text:'Gagal mengambil data nilai. Coba refresh halaman.'});
+        }
+      }
+
+      function Raditya_deleteScore(id){
+        Swal.fire({
+          title: 'Hapus data?',
+          text: 'Yakin mau menghapus nilai ini? Tindakan tidak bisa dibatalkan.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Ya, hapus',
+          cancelButtonText: 'Batal',
+          confirmButtonColor: '#d33'
+        }).then(res=>{
+          if(res.isConfirmed) location.href = `/nilai/delete/${id}`;
+        });
+      }
+
+      Raditya_qs('#btn-add').addEventListener('click', ()=>{
+        Raditya_qs('#modalTitle').textContent = 'Tambah Nilai';
+        Raditya_qs('#formNilai').action = '/nilai/add';
+        Raditya_qs('#field-nis').value = '';
+        Raditya_qs('#field-mapel').value = '';
+        Raditya_qs('#field-tugas').value = '';
+        Raditya_qs('#field-uts').value = '';
+        Raditya_qs('#field-uas').value = '';
+        Raditya_qs('#submitBtn').textContent = 'Tambah';
+        Raditya_qs('#submitBtn').disabled = false;
+      });
+
+      Raditya_qs('#formNilai').addEventListener('submit', (e)=>{
+        const tugas = parseFloat(Raditya_qs('#field-tugas').value || '0');
+        const uts = parseFloat(Raditya_qs('#field-uts').value || '0');
+        const uas = parseFloat(Raditya_qs('#field-uas').value || '0');
+
+        if(isNaN(tugas) || isNaN(uts) || isNaN(uas) || tugas < 0 || uts < 0 || uas < 0 || tugas > 100 || uts > 100 || uas > 100){
+          e.preventDefault();
+          Swal.fire({icon:'error',title:'Nilai tidak valid',text:'Pastikan semua nilai angka antara 0 - 100.'});
+          return;
+        }
+        Raditya_qs('#submitBtn').disabled = true;
+        Raditya_qs('#submitBtn').innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Menyimpan...`;
+      });
+
+      Raditya_qs('#btn-add-siswa').addEventListener('click', async ()=>{
+        Raditya_qs('#modalSiswaTitle').textContent = 'Tambah Siswa';
+        Raditya_qs('#formSiswa').method = 'post';
+        Raditya_qs('#formSiswa').action = '/siswa/add';
+        try{
+          const res = await fetch('/siswa/next-nis');
+          const j = await res.json();
+          Raditya_qs('#siswa-nis').value = j.next_nis || '';
+        }catch(e){ Raditya_qs('#siswa-nis').value = ''; }
+        Raditya_qs('#siswa-nama').value = '';
+        const jkEl = Raditya_qs('#siswa-jk');
+        if(jkEl && jkEl.options.length>1) jkEl.selectedIndex = 1;
+        Raditya_qs('#siswa-tempat').value = '';
+        Raditya_qs('#siswa-tanggal').value = '';
+        Raditya_qs('#siswa-alamat').value = '';
+        const kelasEl = Raditya_qs('#siswa-kelas');
+        if(kelasEl && kelasEl.options.length>1) kelasEl.selectedIndex = 1;
+        Raditya_qs('#submitSiswaBtn').textContent = 'Tambah';
+        Raditya_qs('#submitSiswaBtn').disabled = false;
+      });
+
+      async function Raditya_editStudent(nis, name){
+        try{ Swal.close(); }catch(e){}
+        Raditya_qs('#modalSiswaTitle').textContent = 'Edit Siswa';
+        Raditya_qs('#formSiswa').method = 'post';
+        Raditya_qs('#formSiswa').action = `/siswa/edit/${nis}`;
+
+        try{
+          const res = await fetch(`/siswa/${nis}/json`);
+          if(!res.ok) throw new Error('fetch not ok');
+          const data = await res.json();
+
+          Raditya_qs('#siswa-nis').value = data && data.NIS_Raditya ? data.NIS_Raditya : nis;
+          Raditya_qs('#siswa-nama').value = data && data.Nama_Raditya ? data.Nama_Raditya : (name || '');
+
+          if(data && data.Jenis_Kelamin_Raditya){
+            const jkEl = Raditya_qs('#siswa-jk');
+            if(jkEl){
+              const opt = Array.from(jkEl.options).find(o=>o.value == data.Jenis_Kelamin_Raditya);
+              if(opt) jkEl.value = opt.value;
+            }
+          }
+
+          Raditya_qs('#siswa-tempat').value = data && data.Tempat_Lahir_Raditya ? data.Tempat_Lahir_Raditya : '';
+
+          if(data && data.Tanggal_Lahir_Raditya){
+            let t = data.Tanggal_Lahir_Raditya;
+            if(typeof t !== 'string'){
+              try{ t = String(t); }catch(e){}
+            }
+            if(typeof t === 'string'){
+              const m = t.match(/(\d{4}-\d{2}-\d{2})/);
+              if(m) Raditya_qs('#siswa-tanggal').value = m[1];
+              else Raditya_qs('#siswa-tanggal').value = '';
+            } else {
+              Raditya_qs('#siswa-tanggal').value = '';
+            }
+          } else {
+            Raditya_qs('#siswa-tanggal').value = '';
+          }
+
+          Raditya_qs('#siswa-alamat').value = data && data.Alamat_Raditya ? data.Alamat_Raditya : '';
+
+          if(data && (data.ID_Kelas || data.ID_Kelas === 0 || data.ID_Kelas === '0')){
+            const kelasEl = Raditya_qs('#siswa-kelas');
+            if(kelasEl){
+              const optk = Array.from(kelasEl.options).find(o=>o.value == data.ID_Kelas);
+              if(optk) kelasEl.value = optk.value;
+            }
+          }
+        }catch(err){
+          Raditya_qs('#siswa-nis').value = nis;
+          Raditya_qs('#siswa-nama').value = name || '';
+          Raditya_qs('#siswa-tempat').value = '';
+          Raditya_qs('#siswa-tanggal').value = '';
+          Raditya_qs('#siswa-alamat').value = '';
+          const jkEl = Raditya_qs('#siswa-jk'); if(jkEl && jkEl.options.length>1) jkEl.selectedIndex = 1;
+          const kelasEl = Raditya_qs('#siswa-kelas'); if(kelasEl && kelasEl.options.length>1) kelasEl.selectedIndex = 1;
+          console.warn('Gagal ambil data siswa lengkap:', err);
+        }
+
+        Raditya_qs('#submitSiswaBtn').textContent = 'Update';
+        Raditya_qs('#submitSiswaBtn').disabled = false;
+        new bootstrap.Modal(document.getElementById('modalSiswa')).show();
+      }
+
+      Raditya_qs('#formSiswa').addEventListener('submit', ()=>{
+        Raditya_qs('#submitSiswaBtn').disabled = true;
+        Raditya_qs('#submitSiswaBtn').innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Menyimpan...`;
+      });
+
+      Raditya_qs('#searchSiswa').addEventListener('input', (e)=>{
+        const q = e.target.value.trim().toLowerCase();
+        const rows = Raditya_qsa('#tableSiswa tbody tr');
+        let total = 0;
+        rows.forEach(row => {
+          const text = (row.innerText || '').toLowerCase();
+          if(text.includes(q)){
+            row.style.display = '';
+            total++;
+          } else {
+            row.style.display = 'none';
+          }
+        });
+        Raditya_qs('#totalSiswa').textContent = total;
+      });
+
+      (function Raditya_showStatus(){
+        const params = new URLSearchParams(location.search);
+        const s = params.get('status');
+        if(!s) return;
+        if(s === 'created') Swal.fire({icon:'success',title:'Berhasil',text:'Nilai berhasil ditambahkan',timer:1800,showConfirmButton:false});
+        if(s === 'updated') Swal.fire({icon:'success',title:'Berhasil',text:'Nilai berhasil diperbarui',timer:1800,showConfirmButton:false});
+        if(s === 'deleted') Swal.fire({icon:'success',title:'Berhasil',text:'Nilai berhasil dihapus',timer:1800,showConfirmButton:false});
+        if(s === 'siswa_created') Swal.fire({icon:'success',title:'Berhasil',text:'Siswa berhasil ditambahkan',timer:1600,showConfirmButton:false});
+        if(s === 'siswa_updated') Swal.fire({icon:'success',title:'Berhasil',text:'Siswa berhasil diperbarui',timer:1600,showConfirmButton:false});
+        window.history.replaceState({}, document.title, window.location.pathname + window.location.search);
+      })();
+    </script>
+  </body>
+</html>

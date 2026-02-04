@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>E-Raport {{ Raditya_siswa.Nama_Raditya if Raditya_siswa }}</title>
+  <style>
+    @page { size: A4; margin: 20mm; }
+    body { font-family: Arial, Helvetica, sans-serif; color:#0f172a; font-size:12px; }
+    .wrap { width:100%; }
+    .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+    .brand { color:#4c1d95; font-weight:800; font-size:20px; }
+    .school { text-align:right; font-size:12px; color:#374151; }
+    .meta { color:#475569; font-size:12px; margin-top:4px; }
+
+    .info {
+      border:1px solid #e6edf3;
+      border-radius:8px;
+      padding:10px;
+      display:flex;
+      gap:18px;
+      margin-bottom:12px;
+    }
+    .info .left { flex:1; }
+    .info .right { width:260px; text-align:center; }
+    .info b { display:inline-block; width:120px; color:#0f172a; }
+
+    table { width:100%; border-collapse:collapse; margin-top:8px; }
+    th, td { padding:8px 10px; border:1px solid #e6edf3; text-align:left; }
+    th { background:#f3f6fb; font-weight:700; }
+    .center { text-align:center; }
+
+    .avg-box { margin-top:14px; display:flex; justify-content:flex-end; }
+    .avg {
+      border-radius:8px;
+      padding:10px 14px;
+      background:#f8fafc;
+      border:1px solid #e6edf3;
+      min-width:200px;
+      text-align:center;
+    }
+
+    .notes { margin-top:10px; font-size:11px; color:#374151; }
+
+    .sign { margin-top:30px; }
+    .small { font-size:11px; color:#6b7280; }
+    .title-section { font-size:14px; font-weight:700; margin-bottom:6px; }
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+
+  {# --- Alias Jinja supaya semua variabel di template pake Raditya_* tanpa ubah backend --- #}
+  {% set Raditya_siswa = siswa %}
+  {% set Raditya_nilai = nilai %}
+  {% set Raditya_semester = semester %}
+  {% set Raditya_tahun_pelajaran = tahun_pelajaran %}
+  {% set Raditya_avg_nilai = avg_nilai %}
+
+  <div class="header">
+    <div>
+      <div class="brand">E-Raport</div>
+      <div class="meta">Laporan Hasil Belajar Siswa</div>
+    </div>
+    <div class="school">
+      <div>SMK Negeri 2 Cimahi</div>
+      <div class="small">
+        Semester {{ Raditya_semester }} • Tahun Pelajaran {{ Raditya_tahun_pelajaran }}
+      </div>
+    </div>
+  </div>
+
+  <div class="info">
+    <div class="left">
+      <div class="title-section">IDENTITAS SISWA</div>
+      <div><b>Nama</b>: {{ Raditya_siswa.Nama_Raditya }}</div>
+      <div><b>NIS</b>: {{ Raditya_siswa.NIS_Raditya }}</div>
+      <div><b>Kelas</b>: {{ Raditya_siswa.Tingkat_Raditya }} {{ Raditya_siswa.Jurusan_Raditya }}</div>
+      <div><b>Semester</b>: {{ Raditya_semester }}</div>
+      <div><b>Tahun Pelajaran</b>: {{ Raditya_tahun_pelajaran }}</div>
+    </div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:50px" class="center">No</th>
+        <th>Mata Pelajaran</th>
+        <th style="width:80px" class="center">KKM</th>
+        <th style="width:90px" class="center">Nilai Akhir</th>
+        <th style="width:120px" class="center">Keterangan</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for n in Raditya_nilai %}
+      <tr>
+        <td class="center">{{ loop.index }}</td>
+        <td>{{ n.Nama_Mapel_Raditya }}</td>
+        <td class="center">{{ n.KKM_Raditya }}</td>
+        <td class="center"><strong>{{ n.Nilai_Akhir_Raditya }}</strong></td>
+        <td class="center">
+          {% if n.Nilai_Akhir_Raditya >= 90 %}
+            Sangat Baik
+          {% elif n.Nilai_Akhir_Raditya >= 80 %}
+            Baik
+          {% elif n.Nilai_Akhir_Raditya >= 70 %}
+            Cukup
+          {% else %}
+            Kurang
+          {% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="5" class="center">Data nilai belum tersedia.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="notes">
+    <strong>Catatan:</strong>
+    Nilai merupakan hasil evaluasi pembelajaran dan telah diproses oleh sistem E-Raport.
+  </div>
+
+  <div class="sign">
+    <table style="width:100%; border:none;">
+      <tr>
+        <td style="width:50%; text-align:center;">
+          <div class="small">Mengetahui,</div>
+          <br><br><br>
+          <div>______________________</div>
+          <div class="small">Kepala Sekolah</div>
+        </td>
+        <td style="width:50%; text-align:center;">
+          <div class="small">Wali Kelas,</div>
+          <br><br><br>
+          <div>______________________</div>
+          <div class="small">Wali Kelas</div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+</div>
+</body>
+</html>
