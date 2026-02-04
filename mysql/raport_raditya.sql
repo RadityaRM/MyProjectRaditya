@@ -3,7 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
+<<<<<<< HEAD
 -- Generation Time: Feb 04, 2026 at 03:37 AM
+=======
+-- Generation Time: Jan 22, 2026 at 05:09 AM
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -134,7 +138,10 @@ CREATE TABLE `raditya_nilai` (
 --
 
 INSERT INTO `raditya_nilai` (`ID_Nilai_Raditya`, `NIS_Raditya`, `ID_Mapel_Raditya`, `Nilai_Tugas_Raditya`, `Nilai_UTS_Raditya`, `Nilai_UAS_Raditya`, `Nilai_Akhir_Raditya`, `Deskripsi_Raditya`, `Semester_Raditya`, `Tahun_Ajaran_Raditya`) VALUES
+<<<<<<< HEAD
 (1, 10243314, 9, 100, 100, 100, 100, '', 1, '2026'),
+=======
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
 (4, 10243309, 6, 100, 100, 100, 100, '', 1, '2026'),
 (6, 10243309, 5, 100, 100, 100, 100, '', 1, '2026'),
 (7, 10243309, 7, 100, 100, 100, 100, '', 1, '2026'),
@@ -189,6 +196,7 @@ INSERT INTO `raditya_nilai` (`ID_Nilai_Raditya`, `NIS_Raditya`, `ID_Mapel_Radity
 (57, 10243311, 4, 100, 100, 100, 100, '', 1, '2026'),
 (58, 10243311, 8, 100, 100, 100, 100, '', 1, '2026'),
 (59, 10243311, 6, 100, 100, 100, 100, '', 1, '2026'),
+<<<<<<< HEAD
 (60, 10243311, 11, 100, 100, 100, 100, '', 1, '2026'),
 (61, 10243314, 5, 100, 100, 100, 100, '', 1, '2026'),
 (62, 10243314, 7, 100, 100, 100, 100, '', 1, '2026'),
@@ -200,6 +208,9 @@ INSERT INTO `raditya_nilai` (`ID_Nilai_Raditya`, `NIS_Raditya`, `ID_Mapel_Radity
 (68, 10243314, 8, 100, 100, 100, 100, '', 1, '2026'),
 (69, 10243314, 6, 100, 100, 100, 100, '', 1, '2026'),
 (71, 10243314, 11, 100, 100, 100, 100, '', 1, '2026');
+=======
+(60, 10243311, 11, 100, 100, 100, 100, '', 1, '2026');
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
 
 -- --------------------------------------------------------
 
@@ -224,10 +235,17 @@ CREATE TABLE `raditya_siswa` (
 INSERT INTO `raditya_siswa` (`NIS_Raditya`, `Nama_Raditya`, `Jenis_Kelamin_Raditya`, `Tempat_Lahir_Raditya`, `Tanggal_Lahir_Raditya`, `Alamat_Raditya`, `ID_Kelas`) VALUES
 (10243309, 'Harry Granger', 'Laki-Laki', 'London ', '2008-12-07', 'West London', 1),
 (10243310, 'Eren Yeager', 'Laki-Laki', 'Shiganshina District', '2008-07-02', 'Shiganshina City', 4),
+<<<<<<< HEAD
 (10243311, 'Mikasa Ackerman', 'Perempuan', 'Shiganshina District', '2000-01-01', 'Shiganshina City', 1),
 (10243312, 'Armin Arlert', 'Laki-Laki', 'Shiganshina District', '2008-05-26', 'Shiganshina City', 3),
 (10243313, 'Jean Kirstein', 'Laki-Laki', 'Orvud District', '2009-01-25', 'Orvud City', 2),
 (10243314, 'Hermione Granger', 'Perempuan', 'Paris', '2008-02-05', 'Paris City', 1);
+=======
+(10243311, 'Mikasa Ackerman', 'Laki-Laki', 'Shiganshina District', '2008-02-15', 'Shiganshina City', 4),
+(10243312, 'Armin Arlert', 'Laki-Laki', 'Shiganshina District', '2008-05-26', 'Shiganshina City', 3),
+(10243313, 'Jean Kirstein', 'Laki-Laki', 'Orvud District', '2009-01-25', 'Orvud City', 2),
+(10243314, 'Hermione Granger', 'Perempuan', 'Francè', '2008-11-12', 'Paris', 2);
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
 
 -- --------------------------------------------------------
 
@@ -307,6 +325,7 @@ ALTER TABLE `raditya_user`
   ADD KEY `fk_user_guru` (`ID_Guru_Raditya`);
 
 --
+<<<<<<< HEAD
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -317,6 +336,8 @@ ALTER TABLE `raditya_nilai`
   MODIFY `ID_Nilai_Raditya` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
+=======
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
 -- Constraints for dumped tables
 --
 

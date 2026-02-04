@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from flask import Flask, render_template, request, redirect, url_for, jsonify, send_file, Response
 import mysql.connector
 import decimal
@@ -6,6 +7,15 @@ from xhtml2pdf import pisa
 import datetime
 import re
 import csv
+=======
+from flask import Flask, render_template, request, redirect, url_for, jsonify, send_file
+import mysql.connector
+import decimal
+from io import BytesIO
+from xhtml2pdf import pisa
+import datetime
+import re
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
 
 app = Flask(__name__)
 
@@ -64,6 +74,7 @@ def get_enum_options_from_column(table, column):
 
 @app.route('/')
 def index():
+<<<<<<< HEAD
     f_semester = request.args.get('semester') or None
     f_tahun = request.args.get('tahun') or request.args.get('tahun_ajaran') or None
     f_id_kelas = request.args.get('id_kelas') or None
@@ -73,10 +84,17 @@ def index():
         cur = conn.cursor(dictionary=True)
 
         query_students = """
+=======
+    conn = get_db_connection()
+    try:
+        cur = conn.cursor(dictionary=True)
+        cur.execute("""
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
             SELECT s.NIS_Raditya, s.Nama_Raditya,
                    ROUND(IFNULL(AVG(n.Nilai_Akhir_Raditya),0),2) AS Avg_Final
             FROM raditya_siswa s
             LEFT JOIN raditya_nilai n ON s.NIS_Raditya = n.NIS_Raditya
+<<<<<<< HEAD
         """
         params = []
         where_clauses = []
@@ -95,6 +113,11 @@ def index():
 
         query_students += " GROUP BY s.NIS_Raditya ORDER BY s.NIS_Raditya ASC"
         cur.execute(query_students, params)
+=======
+            GROUP BY s.NIS_Raditya
+            ORDER BY s.NIS_Raditya ASC
+        """)
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
         Raditya_students = cur.fetchall()
 
         cur.execute("""
@@ -106,6 +129,7 @@ def index():
             GROUP BY m.ID_Mapel_Raditya
             ORDER BY m.Nama_Mapel_Raditya
         """)
+<<<<<<< HEAD
         try:
             Raditya_mapel_stats = cur.fetchall()
         except Exception:
@@ -123,6 +147,9 @@ def index():
             except Exception:
                 cur.execute("SELECT ID_Mapel_Raditya, Nama_Mapel_Raditya FROM raditya_mapel ORDER BY Nama_Mapel_Raditya")
                 Raditya_mapel_stats = cur.fetchall()
+=======
+        Raditya_mapel_stats = cur.fetchall()
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
 
         cur.execute("SELECT NIS_Raditya, Nama_Raditya FROM raditya_siswa ORDER BY NIS_Raditya ASC")
         Raditya_siswa_list = cur.fetchall()
@@ -132,6 +159,7 @@ def index():
 
         cur.execute("SELECT ID_Kelas_Raditya, Jurusan_Raditya, Tingkat_Raditya FROM raditya_kelas ORDER BY Tingkat_Raditya, Jurusan_Raditya")
         Raditya_kelas_list = cur.fetchall()
+<<<<<<< HEAD
 
         cur.execute("SELECT DISTINCT Semester_Raditya AS sem FROM raditya_nilai ORDER BY Semester_Raditya ASC")
         Raditya_semester_list = [r['sem'] for r in cur.fetchall() if r and r.get('sem') is not None]
@@ -139,6 +167,8 @@ def index():
         cur.execute("SELECT DISTINCT Tahun_Ajaran_Raditya AS th FROM raditya_nilai ORDER BY Tahun_Ajaran_Raditya DESC")
         Raditya_tahun_list = [r['th'] for r in cur.fetchall() if r and r.get('th') is not None]
 
+=======
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
     finally:
         conn.close()
 
@@ -152,10 +182,14 @@ def index():
                            siswa=Raditya_siswa_list,
                            mapel=Raditya_mapel_list,
                            kelas=Raditya_kelas_list,
+<<<<<<< HEAD
                            jk_options=jk_options,
                            semester_list=Raditya_semester_list,
                            tahun_list=Raditya_tahun_list,
                            active_filters={'semester': f_semester, 'tahun': f_tahun, 'id_kelas': f_id_kelas})
+=======
+                           jk_options=jk_options)
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
 
 @app.route('/mapel/<int:Raditya_id>/data')
 def mapel_data(Raditya_id):
@@ -407,6 +441,7 @@ def siswa_list():
         conn.close()
     return jsonify(Raditya_rows or [])
 
+<<<<<<< HEAD
 @app.route('/cetak-raport-all')
 def cetak_raport_all():
     f_semester = request.args.get('semester') or None
@@ -645,6 +680,8 @@ def cetak_raport_all_csv():
         headers={"Content-disposition": f"attachment; filename={filename}"}
     )
 
+=======
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
 @app.route('/raport/<int:Raditya_nis>/preview')
 def raport_preview(Raditya_nis):
     Raditya_req_sem = request.args.get('semester')
@@ -811,4 +848,8 @@ def raport_pdf(Raditya_nis):
     return send_file(Raditya_pdf, download_name=f"Raport {Raditya_siswa['Nama_Raditya']}.pdf", as_attachment=True)
 
 if __name__ == '__main__':
+<<<<<<< HEAD
     app.run(debug=True)
+=======
+    app.run(debug=True)
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72

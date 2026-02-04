@@ -60,7 +60,11 @@
             <div class="small-muted">Klik mapel untuk lihat detail nilai</div>
           </div>
           <div>
+<<<<<<< HEAD
             <button class="btn btn-light me-2" onclick="location.href='/'"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+=======
+            <button class="btn btn-light me-2" onclick="location.reload()"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
             <button id="btn-add" class="btn btn-accent" data-bs-toggle="modal" data-bs-target="#modalForm"><i class="bi bi-plus-lg"></i> Tambah Nilai</button>
             <button id="btn-add-siswa" class="btn btn-outline-primary ms-2" data-bs-toggle="modal" data-bs-target="#modalSiswa"><i class="bi bi-person-plus"></i> Tambah Siswa</button>
           </div>
@@ -87,6 +91,7 @@
             <h5 class="mb-0">Daftar Siswa (Nilai Akhir Rata-Rata)</h5>
             <div class="small-muted">Tabel menampilkan ringkasan nilai tiap siswa.</div>
           </div>
+<<<<<<< HEAD
 
           <div style="min-width:520px; display:flex; gap:8px; align-items:center;">
             <button id="btn-cetak" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalCetak"><i class="bi bi-printer"></i> Cetak</button>
@@ -101,6 +106,14 @@
             <button id="btn-filter" class="btn btn-outline-primary ms-2" title="Filter" data-bs-toggle="modal" data-bs-target="#modalFilter">
               <i class="bi bi-filter"></i> Filter
             </button>
+=======
+          <div style="min-width:300px">
+            <div class="input-group">
+              <input type="text" id="searchSiswa" class="form-control" placeholder="Cari nama / NIS siswa...">
+              <button class="btn btn-light" id="refreshSiswa"><i class="bi bi-arrow-clockwise"></i></button>
+            </div>
+            <div class="small-muted text-end mt-1">Total siswa: <strong id="totalSiswa">{{ students|length }}</strong></div>
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
           </div>
         </div>
 
@@ -139,6 +152,7 @@
       <div class="footer">© <strong>E-Raport </strong>| All Right Reserved</div>
     </div>
 
+<<<<<<< HEAD
     <div class="modal fade" id="modalCetak" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
@@ -178,6 +192,9 @@
       </div>
     </div>
 
+=======
+    <!-- Modal Nilai -->
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
     <div class="modal fade" id="modalForm" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <form id="formNilai" method="post">
@@ -233,6 +250,10 @@
       </div>
     </div>
 
+<<<<<<< HEAD
+=======
+    <!-- Modal Siswa -->
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
     <div class="modal fade" id="modalSiswa" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-md">
         <form id="formSiswa" method="post">
@@ -296,6 +317,7 @@
       </div>
     </div>
 
+<<<<<<< HEAD
     <div class="modal fade" id="modalFilter" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <form id="formFilter" class="modal-content">
@@ -340,11 +362,14 @@
       </div>
     </div>
 
+=======
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
       const Raditya_qs = s => document.querySelector(s);
       const Raditya_qsa = s => document.querySelectorAll(s);
 
+<<<<<<< HEAD
       Raditya_qs('#refreshSiswa').addEventListener('click', ()=> window.location.href = '/');
 
       function currentParams() {
@@ -375,6 +400,17 @@
         const url = '/' + (params.toString() ? '?' + params.toString() : '');
         window.location.href = url;
       });
+=======
+      const Raditya_modalEl = document.getElementById('modalForm');
+      const Raditya_bsModal = new bootstrap.Modal(Raditya_modalEl);
+      const Raditya_form = Raditya_qs('#formNilai');
+      const Raditya_submitBtn = Raditya_qs('#submitBtn');
+
+      const Raditya_modalSiswaEl = document.getElementById('modalSiswa');
+      const Raditya_bsModalSiswa = new bootstrap.Modal(Raditya_modalSiswaEl);
+      const Raditya_formSiswa = Raditya_qs('#formSiswa');
+      const Raditya_submitSiswaBtn = Raditya_qs('#submitSiswaBtn');
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
 
       function Raditya_openMapel(id){
         fetch(`/mapel/${id}/data`).then(r=>r.json()).then(rows=>{
@@ -428,7 +464,11 @@
           }
 
           Raditya_qs('#modalTitle').textContent = 'Edit Nilai';
+<<<<<<< HEAD
           Raditya_qs('#formNilai').action = `/nilai/edit/${id}`;
+=======
+          Raditya_form.action = `/nilai/edit/${id}`;
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
 
           const nisVal = row.NIS_Raditya !== undefined && row.NIS_Raditya !== null ? row.NIS_Raditya : '';
           const mapelVal = row.ID_Mapel_Raditya !== undefined && row.ID_Mapel_Raditya !== null ? row.ID_Mapel_Raditya : '';
@@ -439,9 +479,15 @@
           Raditya_qs('#field-uts').value = (row.Nilai_UTS_Raditya !== undefined && row.Nilai_UTS_Raditya !== null) ? row.Nilai_UTS_Raditya : '';
           Raditya_qs('#field-uas').value = (row.Nilai_UAS_Raditya !== undefined && row.Nilai_UAS_Raditya !== null) ? row.Nilai_UAS_Raditya : '';
 
+<<<<<<< HEAD
           Raditya_qs('#submitBtn').textContent = 'Update';
           Raditya_qs('#submitBtn').disabled = false;
           new bootstrap.Modal(document.getElementById('modalForm')).show();
+=======
+          Raditya_submitBtn.textContent = 'Update';
+          Raditya_submitBtn.disabled = false;
+          Raditya_bsModal.show();
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
         }catch(err){
           console.error('gagal load nilai untuk edit', err);
           Swal.fire({icon:'error',title:'Error',text:'Gagal mengambil data nilai. Coba refresh halaman.'});
@@ -464,17 +510,29 @@
 
       Raditya_qs('#btn-add').addEventListener('click', ()=>{
         Raditya_qs('#modalTitle').textContent = 'Tambah Nilai';
+<<<<<<< HEAD
         Raditya_qs('#formNilai').action = '/nilai/add';
+=======
+        Raditya_form.action = '/nilai/add';
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
         Raditya_qs('#field-nis').value = '';
         Raditya_qs('#field-mapel').value = '';
         Raditya_qs('#field-tugas').value = '';
         Raditya_qs('#field-uts').value = '';
         Raditya_qs('#field-uas').value = '';
+<<<<<<< HEAD
         Raditya_qs('#submitBtn').textContent = 'Tambah';
         Raditya_qs('#submitBtn').disabled = false;
       });
 
       Raditya_qs('#formNilai').addEventListener('submit', (e)=>{
+=======
+        Raditya_submitBtn.textContent = 'Tambah';
+        Raditya_submitBtn.disabled = false;
+      });
+
+      Raditya_form.addEventListener('submit', (e)=>{
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
         const tugas = parseFloat(Raditya_qs('#field-tugas').value || '0');
         const uts = parseFloat(Raditya_qs('#field-uts').value || '0');
         const uas = parseFloat(Raditya_qs('#field-uas').value || '0');
@@ -484,20 +542,31 @@
           Swal.fire({icon:'error',title:'Nilai tidak valid',text:'Pastikan semua nilai angka antara 0 - 100.'});
           return;
         }
+<<<<<<< HEAD
         Raditya_qs('#submitBtn').disabled = true;
         Raditya_qs('#submitBtn').innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Menyimpan...`;
+=======
+        Raditya_submitBtn.disabled = true;
+        Raditya_submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Menyimpan...`;
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
       });
 
       Raditya_qs('#btn-add-siswa').addEventListener('click', async ()=>{
         Raditya_qs('#modalSiswaTitle').textContent = 'Tambah Siswa';
+<<<<<<< HEAD
         Raditya_qs('#formSiswa').method = 'post';
         Raditya_qs('#formSiswa').action = '/siswa/add';
+=======
+        Raditya_formSiswa.method = 'post';
+        Raditya_formSiswa.action = '/siswa/add';
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
         try{
           const res = await fetch('/siswa/next-nis');
           const j = await res.json();
           Raditya_qs('#siswa-nis').value = j.next_nis || '';
         }catch(e){ Raditya_qs('#siswa-nis').value = ''; }
         Raditya_qs('#siswa-nama').value = '';
+<<<<<<< HEAD
         const jkEl = Raditya_qs('#siswa-jk');
         if(jkEl && jkEl.options.length>1) jkEl.selectedIndex = 1;
         Raditya_qs('#siswa-tempat').value = '';
@@ -507,13 +576,29 @@
         if(kelasEl && kelasEl.options.length>1) kelasEl.selectedIndex = 1;
         Raditya_qs('#submitSiswaBtn').textContent = 'Tambah';
         Raditya_qs('#submitSiswaBtn').disabled = false;
+=======
+        const Raditya_jkSelect = Raditya_qs('#siswa-jk');
+        if(Raditya_jkSelect && Raditya_jkSelect.options.length>1) Raditya_jkSelect.selectedIndex = 1;
+        Raditya_qs('#siswa-tempat').value = '';
+        Raditya_qs('#siswa-tanggal').value = '';
+        Raditya_qs('#siswa-alamat').value = '';
+        const Raditya_kelasSelect = Raditya_qs('#siswa-kelas');
+        if(Raditya_kelasSelect && Raditya_kelasSelect.options.length>1) Raditya_kelasSelect.selectedIndex = 1;
+        Raditya_submitSiswaBtn.textContent = 'Tambah';
+        Raditya_submitSiswaBtn.disabled = false;
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
       });
 
       async function Raditya_editStudent(nis, name){
         try{ Swal.close(); }catch(e){}
         Raditya_qs('#modalSiswaTitle').textContent = 'Edit Siswa';
+<<<<<<< HEAD
         Raditya_qs('#formSiswa').method = 'post';
         Raditya_qs('#formSiswa').action = `/siswa/edit/${nis}`;
+=======
+        Raditya_formSiswa.method = 'post';
+        Raditya_formSiswa.action = `/siswa/edit/${nis}`;
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
 
         try{
           const res = await fetch(`/siswa/${nis}/json`);
@@ -569,6 +654,7 @@
           console.warn('Gagal ambil data siswa lengkap:', err);
         }
 
+<<<<<<< HEAD
         Raditya_qs('#submitSiswaBtn').textContent = 'Update';
         Raditya_qs('#submitSiswaBtn').disabled = false;
         new bootstrap.Modal(document.getElementById('modalSiswa')).show();
@@ -577,6 +663,16 @@
       Raditya_qs('#formSiswa').addEventListener('submit', ()=>{
         Raditya_qs('#submitSiswaBtn').disabled = true;
         Raditya_qs('#submitSiswaBtn').innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Menyimpan...`;
+=======
+        Raditya_submitSiswaBtn.textContent = 'Update';
+        Raditya_submitSiswaBtn.disabled = false;
+        Raditya_bsModalSiswa.show();
+      }
+
+      Raditya_formSiswa.addEventListener('submit', ()=>{
+        Raditya_submitSiswaBtn.disabled = true;
+        Raditya_submitSiswaBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Menyimpan...`;
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
       });
 
       Raditya_qs('#searchSiswa').addEventListener('input', (e)=>{
@@ -595,6 +691,11 @@
         Raditya_qs('#totalSiswa').textContent = total;
       });
 
+<<<<<<< HEAD
+=======
+      Raditya_qs('#refreshSiswa').addEventListener('click', ()=> location.reload());
+
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
       (function Raditya_showStatus(){
         const params = new URLSearchParams(location.search);
         const s = params.get('status');
@@ -604,8 +705,14 @@
         if(s === 'deleted') Swal.fire({icon:'success',title:'Berhasil',text:'Nilai berhasil dihapus',timer:1800,showConfirmButton:false});
         if(s === 'siswa_created') Swal.fire({icon:'success',title:'Berhasil',text:'Siswa berhasil ditambahkan',timer:1600,showConfirmButton:false});
         if(s === 'siswa_updated') Swal.fire({icon:'success',title:'Berhasil',text:'Siswa berhasil diperbarui',timer:1600,showConfirmButton:false});
+<<<<<<< HEAD
         window.history.replaceState({}, document.title, window.location.pathname + window.location.search);
       })();
+=======
+        window.history.replaceState({}, document.title, window.location.pathname);
+      })();
+
+>>>>>>> 4e5da73ad724034d2f81f139bbd87aead75aae72
     </script>
   </body>
 </html>
